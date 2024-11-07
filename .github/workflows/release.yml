@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+  
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create ZIP file
+        run: |
+          zip -r qexal.ocmod.zip install.xml upload/**
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with: 
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: qexal.ocmod.zip
